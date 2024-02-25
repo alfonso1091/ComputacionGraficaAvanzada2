@@ -75,6 +75,8 @@ Model modelLamboFrontalWheelsLambo;
 Model modelLamboRearWheelsLambo;
 Model modelLamboRearLeftWheel;
 Model modelLamboRearRightWheel;
+Model modelGato;
+Model modelGato1;
 // Dart lego
 Model modelDartLegoBody;
 Model modelDartLegoHead;
@@ -115,6 +117,8 @@ glm::mat4 modelMatrixHeli = glm::mat4(1.0f);
 glm::mat4 modelMatrixLambo = glm::mat4(1.0);
 glm::mat4 modelMatrixAircraft = glm::mat4(1.0);
 glm::mat4 modelMatrixDart = glm::mat4(1.0f);
+glm::mat4 modelMatrixGato = glm::mat4(1.0f);
+glm::mat4 modelMatrixGato1 = glm::mat4(1.0f);
 
 float rotDartHead = 0.0, rotDartLeftArm = 0.0, rotDartLeftHand = 0.0, rotDartRightArm = 0.0, rotDartRightHand = 0.0, rotDartLeftLeg = 0.0, rotDartRightLeg = 0.0;
 int modelSelected = 0;
@@ -249,6 +253,15 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 
 	modelAircraft.loadModel("../models/Aircraft_obj/E 45 Aircraft_obj.obj");
 	modelAircraft.setShader(&shaderMulLighting);
+
+	// Gato
+	modelGato.loadModel("../models/gato/12221_Cat_v1_l3.obj");
+	modelGato.setShader(&shaderMulLighting);
+
+	// Gato1
+	modelGato1.loadModel("../models/gato1/20430_Cat_v1_NEW.obj");
+	modelGato1.setShader(&shaderMulLighting);
+
 
 	// Eclipse
 	modelEclipseChasis.loadModel("../models/Eclipse/2003eclipse_chasis.obj");
@@ -518,6 +531,8 @@ void destroy() {
 	modelLamboRearRightWheel.destroy();
 	modelLamboRightDor.destroy();
 	modelRock.destroy();
+	modelGato.destroy();
+	modelGato1.destroy();
 
 	// Textures Delete
 	glBindTexture(GL_TEXTURE_2D, 0);
@@ -716,6 +731,9 @@ void applicationLoop() {
 	modelMatrixLambo = glm::translate(modelMatrixLambo, glm::vec3(23.0, 0.0, 0.0));
 
 	modelMatrixDart = glm::translate(modelMatrixDart, glm::vec3(3.0, 0.0, 20.0));
+
+	modelMatrixGato = glm::translate(modelMatrixGato, glm::vec3(10.0, 0.0, 20.0));
+	modelMatrixGato1 = glm::translate(modelMatrixGato1, glm::vec3(-10.0, 0.0, 20.0));
 
 	// Variables to interpolation key frames
 	fileName = "../animaciones/animation_dart_joints.txt";
@@ -932,6 +950,13 @@ void applicationLoop() {
 		modelMatrixRearWheels = glm::translate(modelMatrixRearWheels, glm::vec3(0.0, -1.05813, 4.35157));
 		modelEclipseRearWheels.render(modelMatrixRearWheels);
 
+		//Gato
+		modelGato.render(modelMatrixGato);
+
+		//Gato1
+		modelGato1.render(modelMatrixGato1);
+
+
 		// Helicopter
 		glm::mat4 modelMatrixHeliChasis1 = glm::mat4(modelMatrixHeli);
 		modelHeliChasis1.render(modelMatrixHeliChasis1);
@@ -1112,12 +1137,16 @@ void applicationLoop() {
 		case 1:
 			modelMatrixHeli=glm::translate(modelMatrixHeli,glm::vec3(0.0f,-avance1,0.0f));
 			advanceCount2 -= avance1;
+			rotHelHelY += 0.5;
+			rotHelHelX += 0.5;
 			if (advanceCount2<maxAdvance2){
 				advanceCount2=0;
 				state2=2;
 			}
 			break;
 		case 2:
+			rotHelHelY += 0.05;
+			rotHelHelX += 0.05;
 			break;
 		default:
 			break;
@@ -1215,8 +1244,9 @@ void applicationLoop() {
 	
 
 		// Constantes de animaciones
-		rotHelHelY += 0.5;
-		rotHelHelX += 0.5;
+		
+		
+		
 
 		glfwSwapBuffers(window);
 	}
