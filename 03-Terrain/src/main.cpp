@@ -676,7 +676,8 @@ bool processInput(bool continueApplication) {
 			fileName = "../animaciones/animation_buzz_joints.txt";
 		if (modelSelected == 4)
 			fileName = "../animaciones/animation_buzz.txt";
-		if (modelSelected == 5)
+		if (modelSelected == 5){
+		}
 		std::cout << "modelSelected:" << modelSelected << std::endl;
 	}
 	else if(glfwGetKey(window, GLFW_KEY_TAB) == GLFW_RELEASE)
@@ -1134,6 +1135,13 @@ void applicationLoop() {
 		modelMatrixGuardianBody = glm::scale(modelMatrixGuardianBody, glm::vec3(0.04f));
 		guardianModelAnimate.render(modelMatrixGuardianBody);
 
+		glm::vec3 normal1 = terreno.getNormalTerrain(modelMatrixCyborg[3][0],modelMatrixCyborg[3][2]);
+		glm::vec3 ejex1 = glm::vec3(modelMatrixCyborg[0]);
+		glm:: vec3 ejez1 = glm::normalize(glm::cross(ejex1,normal1));
+		ejex1 = glm::normalize(glm::cross(normal1,ejez1));
+		modelMatrixCyborg[0] = glm::vec4(ejex1,0.0);
+		modelMatrixCyborg[1] = glm::vec4(normal1,0.0);
+		modelMatrixCyborg[3][1]=terreno.getHeightTerrain(modelMatrixCyborg[3][0],modelMatrixCyborg[3][2]);
 		glm::mat4 modelMatrixCyborgBody = glm::mat4(modelMatrixCyborg);
 		modelMatrixCyborgBody = glm::scale(modelMatrixCyborgBody, glm::vec3(0.009f));
 		cyborgModelAnimate.setAnimationIndex(animationCyborgIndex);
