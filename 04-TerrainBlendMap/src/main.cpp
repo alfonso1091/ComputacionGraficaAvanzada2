@@ -593,7 +593,7 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	textureB.freeImage(); // Liberamos memoria
 
 	// Definiendo la textura
-	Texture textureBlendMap("../Textures/blendmap1.png");
+	Texture textureBlendMap("../Textures/blendmap.png");
 	textureBlendMap.loadImage(); // Cargar la textura
 	glGenTextures(1, &textureTerrainBlendMapID); // Creando el id de la textura del landingpad
 	glBindTexture(GL_TEXTURE_2D, textureTerrainBlendMapID); // Se enlaza la textura

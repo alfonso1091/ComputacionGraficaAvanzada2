@@ -140,7 +140,7 @@ glm::mat4 modelMatrixGuardian = glm::mat4(1.0f);
 glm::mat4 modelMatrixCyborg = glm::mat4(1.0f);
 
 int animationMayowIndex = 1;
-int animationCyborgIndex = 4;
+int animationCyborgIndex = 0;
 
 float rotDartHead = 0.0, rotDartLeftArm = 0.0, rotDartLeftHand = 0.0, rotDartRightArm = 0.0, rotDartRightHand = 0.0, rotDartLeftLeg = 0.0, rotDartRightLeg = 0.0;
 float rotBuzzHead = 0.0, rotBuzzLeftarm = 0.0, rotBuzzLeftForeArm = 0.0, rotBuzzLeftHand = 0.0;
@@ -366,7 +366,7 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	guardianModelAnimate.setShader(&shaderMulLighting);
 
 	// Cyborg
-	cyborgModelAnimate.loadModel("../models/cyborg/robot.fbx");
+	cyborgModelAnimate.loadModel("../models/cyborg/robot1.fbx");
 	cyborgModelAnimate.setShader(&shaderMulLighting);
 
 	//Terreno
@@ -816,18 +816,18 @@ bool processInput(bool continueApplication) {
 	// Controles de cyborg
 	if (modelSelected == 0 && glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS){
 		modelMatrixCyborg = glm::rotate(modelMatrixCyborg, 0.02f, glm::vec3(0, 1, 0));
-		animationCyborgIndex = 6;
+		animationCyborgIndex = 0;
 	} else if (modelSelected == 0 && glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS){
 		modelMatrixCyborg = glm::rotate(modelMatrixCyborg, -0.02f, glm::vec3(0, 1, 0));
-		animationCyborgIndex = 6;
+		animationCyborgIndex = 0;
 	}
 	if (modelSelected == 0 && glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS){
 		modelMatrixCyborg = glm::translate(modelMatrixCyborg, glm::vec3(0.0, 0.0, 0.02));
-		animationCyborgIndex = 6;
+		animationCyborgIndex = 5;
 	}
 	else if (modelSelected == 0 && glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS){
 		modelMatrixCyborg = glm::translate(modelMatrixCyborg, glm::vec3(0.0, 0.0, -0.02));
-		animationCyborgIndex = 6;
+		animationCyborgIndex = 5;
 	}
 
 
@@ -1143,10 +1143,10 @@ void applicationLoop() {
 		modelMatrixCyborg[1] = glm::vec4(normal1,0.0);
 		modelMatrixCyborg[3][1]=terreno.getHeightTerrain(modelMatrixCyborg[3][0],modelMatrixCyborg[3][2]);
 		glm::mat4 modelMatrixCyborgBody = glm::mat4(modelMatrixCyborg);
-		modelMatrixCyborgBody = glm::scale(modelMatrixCyborgBody, glm::vec3(0.009f));
+		modelMatrixCyborgBody = glm::scale(modelMatrixCyborgBody, glm::vec3(0.008f));
 		cyborgModelAnimate.setAnimationIndex(animationCyborgIndex);
 		cyborgModelAnimate.render(modelMatrixCyborgBody);
-		animationCyborgIndex=4;
+		animationCyborgIndex=0;
 
 		/*******************************************
 		 * Skybox
