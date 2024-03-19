@@ -98,11 +98,11 @@ Model mayowModelAnimate;
 Model cowboyModelAnimate;
 // Guardian con lampara
 Model guardianModelAnimate;
-// Cybog
+// Cyborg
 Model cyborgModelAnimate;
 
 //Terrain
-Terrain terreno(-1,-1,50,32,"../Textures/luis.png");
+Terrain terreno(-1,-1,90,12,"../Textures/luis.png");
 
 GLuint textureCespedID, textureWallID, textureWindowID, textureHighwayID, textureLandingPadID;
 GLuint skyboxTextureID;
@@ -666,7 +666,7 @@ bool processInput(bool continueApplication) {
 	if (enableCountSelected && glfwGetKey(window, GLFW_KEY_TAB) == GLFW_PRESS){
 		enableCountSelected = false;
 		modelSelected++;
-		if(modelSelected > 5)
+		if(modelSelected > 6)
 			modelSelected = 0;
 		if(modelSelected == 1)
 			fileName = "../animaciones/animation_dart_joints.txt";
@@ -677,6 +677,8 @@ bool processInput(bool continueApplication) {
 		if (modelSelected == 4)
 			fileName = "../animaciones/animation_buzz.txt";
 		if (modelSelected == 5){
+		}
+		if (modelSelected == 6){
 		}
 		std::cout << "modelSelected:" << modelSelected << std::endl;
 	}
@@ -823,11 +825,28 @@ bool processInput(bool continueApplication) {
 	}
 	if (modelSelected == 0 && glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS){
 		modelMatrixCyborg = glm::translate(modelMatrixCyborg, glm::vec3(0.0, 0.0, 0.02));
-		animationCyborgIndex = 5;
+		animationCyborgIndex = 1;
 	}
 	else if (modelSelected == 0 && glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS){
 		modelMatrixCyborg = glm::translate(modelMatrixCyborg, glm::vec3(0.0, 0.0, -0.02));
-		animationCyborgIndex = 5;
+		animationCyborgIndex = 1;
+	}
+
+		// Controles de Lambor
+	if (modelSelected == 6 && glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS){
+		modelMatrixLambo = glm::rotate(modelMatrixLambo, 0.05f, glm::vec3(0, 1, 0));
+	
+	} else if (modelSelected == 6 && glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS){
+		modelMatrixLambo = glm::rotate(modelMatrixLambo, -0.05f, glm::vec3(0, 1, 0));
+	
+	}
+	if (modelSelected == 6 && glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS){
+		modelMatrixLambo = glm::translate(modelMatrixLambo, glm::vec3(0.0, 0.0, 0.05));
+
+	}
+	else if (modelSelected == 6 && glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS){
+		modelMatrixLambo = glm::translate(modelMatrixLambo, glm::vec3(0.0, 0.0, -0.05));
+	
 	}
 
 
@@ -957,7 +976,7 @@ void applicationLoop() {
 		glBindTexture(GL_TEXTURE_2D,textureCespedID);
 		terreno.setPosition(glm::vec3(25,0,25));
 		//terreno.enableWireMode();
-		shaderMulLighting.setVectorFloat2("scaleUV",glm::value_ptr(glm::vec2(50.0)));
+		shaderMulLighting.setVectorFloat2("scaleUV",glm::value_ptr(glm::vec2(100.0)));
 		terreno.render();
 		shaderMulLighting.setVectorFloat2("scaleUV",glm::value_ptr(glm::vec2(1.0)));
 		terreno.enableFillMode();
@@ -1010,6 +1029,15 @@ void applicationLoop() {
 
 		// Lambo car
 		glDisable(GL_CULL_FACE);
+		
+		glm::vec3 ejey2 = terreno.getNormalTerrain(modelMatrixLambo[3][0],modelMatrixLambo[3][2]);
+		glm::vec3 ejex2 = glm::vec3(modelMatrixLambo[0]);
+		glm:: vec3 ejez2 = glm::normalize(glm::cross(ejex2,ejey2));
+		ejex2 = glm::normalize(glm::cross(ejey2,ejez2));
+		modelMatrixLambo[0] = glm::vec4(ejex2,0.0);
+		modelMatrixLambo[1] = glm::vec4(ejey2,0.0);
+		modelMatrixLambo[2] = glm::vec4(ejez2,0.0);
+		modelMatrixLambo[3][1]=terreno.getHeightTerrain(modelMatrixLambo[3][0],modelMatrixLambo[3][2]);
 		glm::mat4 modelMatrixLamboChasis = glm::mat4(modelMatrixLambo);
 		modelMatrixLamboChasis = glm::scale(modelMatrixLamboChasis, glm::vec3(1.3, 1.3, 1.3));
 		modelLambo.render(modelMatrixLamboChasis);
@@ -1020,6 +1048,8 @@ void applicationLoop() {
 		modelMatrixLamboLeftDor = glm::translate(modelMatrixLamboLeftDor, glm::vec3(-1.08866, -0.705743, -0.968917));
 		modelLamboLeftDor.render(modelMatrixLamboLeftDor);
 		modelLamboRightDor.render(modelMatrixLamboChasis);
+		
+		
 		modelLamboFrontLeftWheel.render(modelMatrixLamboChasis);
 		modelLamboFrontRightWheel.render(modelMatrixLamboChasis);
 		modelLamboRearLeftWheel.render(modelMatrixLamboChasis);
@@ -1119,6 +1149,7 @@ void applicationLoop() {
 		ejex = glm::normalize(glm::cross(normal,ejez));
 		modelMatrixMayow[0] = glm::vec4(ejex,0.0);
 		modelMatrixMayow[1] = glm::vec4(normal,0.0);
+		modelMatrixMayow[2] = glm::vec4(ejez,0.0);
 		modelMatrixMayow[3][1]=terreno.getHeightTerrain(modelMatrixMayow[3][0],modelMatrixMayow[3][2]);
 		glm::mat4 modelMatrixMayowBody = glm::mat4(modelMatrixMayow);
 		modelMatrixMayowBody = glm::scale(modelMatrixMayowBody, glm::vec3(0.021f));
@@ -1135,15 +1166,17 @@ void applicationLoop() {
 		modelMatrixGuardianBody = glm::scale(modelMatrixGuardianBody, glm::vec3(0.04f));
 		guardianModelAnimate.render(modelMatrixGuardianBody);
 
-		glm::vec3 normal1 = terreno.getNormalTerrain(modelMatrixCyborg[3][0],modelMatrixCyborg[3][2]);
+
+		glm::vec3 ejey1 = terreno.getNormalTerrain(modelMatrixCyborg[3][0],modelMatrixCyborg[3][2]);
 		glm::vec3 ejex1 = glm::vec3(modelMatrixCyborg[0]);
-		glm:: vec3 ejez1 = glm::normalize(glm::cross(ejex1,normal1));
-		ejex1 = glm::normalize(glm::cross(normal1,ejez1));
+		glm:: vec3 ejez1 = glm::normalize(glm::cross(ejex1,ejey1));
+		ejex1 = glm::normalize(glm::cross(ejey1,ejez1));
 		modelMatrixCyborg[0] = glm::vec4(ejex1,0.0);
-		modelMatrixCyborg[1] = glm::vec4(normal1,0.0);
+		modelMatrixCyborg[1] = glm::vec4(ejey1,0.0);
+		modelMatrixCyborg[2] = glm::vec4(ejez1,0.0);
 		modelMatrixCyborg[3][1]=terreno.getHeightTerrain(modelMatrixCyborg[3][0],modelMatrixCyborg[3][2]);
 		glm::mat4 modelMatrixCyborgBody = glm::mat4(modelMatrixCyborg);
-		modelMatrixCyborgBody = glm::scale(modelMatrixCyborgBody, glm::vec3(0.008f));
+		modelMatrixCyborgBody = glm::scale(modelMatrixCyborgBody, glm::vec3(0.009f));
 		cyborgModelAnimate.setAnimationIndex(animationCyborgIndex);
 		cyborgModelAnimate.render(modelMatrixCyborgBody);
 		animationCyborgIndex=0;
