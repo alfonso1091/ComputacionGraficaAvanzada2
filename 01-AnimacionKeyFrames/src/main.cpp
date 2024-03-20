@@ -1107,16 +1107,16 @@ void applicationLoop() {
 		*********************************************/
 		
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, textureHighwayID);
+		glBindTexture(GL_TEXTURE_2D, textureWindowID);
 		shaderMulLightingMT.setInt("texture2", 0);
 		glActiveTexture(GL_TEXTURE3);
-		glBindTexture(GL_TEXTURE3,textureWindowID);
+		glBindTexture(GL_TEXTURE_2D,textureWallID);
 		shaderMulLightingMT.setInt("texture1", 3);
 		esfera1.setScale(glm::vec3(3.0, 3.0, 3.0));
 		esfera1.setPosition(glm::vec3(3.0f, 2.0f, -10.0f));
 		esfera1.render();
 
-		/*
+		
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, textureWallID);
 		shaderMulLighting.setInt("texture1", 0);
@@ -1125,7 +1125,7 @@ void applicationLoop() {
 		esfera1.enableWireMode();
 		esfera1.render();
 		esfera1.enableFillMode();
-*/
+
 		/******************************************
 		 * Landing pad
 		*******************************************/
